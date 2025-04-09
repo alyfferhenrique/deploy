@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Função para carregar dados da API
     const carregarDados = async () => {
         try {
-            const response = await fetch('/.netlify/functions/api/dados', {
+            const response = await fetch('/api/dados', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            
+
             if (data.sucesso) {
                 // Exibir dados na interface
                 let html = '<ul class="data-list">';
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </li>`;
                 });
                 html += '</ul>';
-                
+
                 apiData.innerHTML = html;
             } else {
                 apiData.innerHTML = '<p class="error">Erro ao carregar dados</p>';

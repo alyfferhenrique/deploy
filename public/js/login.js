@@ -11,31 +11,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         // Obter valores do formulário
         const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
-        
+
         // Limpar mensagem de erro anterior
         errorMessage.style.display = 'none';
-        
+
         try {
             // Enviar requisição para a API de autenticação
-            const response = await fetch('/.netlify/functions/auth/login', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email, senha })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.sucesso) {
                 // Armazenar token e informações do usuário
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('usuario', JSON.stringify(data.usuario));
-                
+
                 // Redirecionar para o dashboard
                 window.location.href = 'dashboard.html';
             } else {

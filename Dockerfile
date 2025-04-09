@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:16-alpine
 
 WORKDIR /app
 
@@ -11,11 +11,8 @@ RUN npm install
 # Copiar código-fonte
 COPY . .
 
-# Construir as funções serverless
-RUN npm run build
-
-# Expor a porta (para desenvolvimento local)
+# Expor a porta (para desenvolvimento local e acesso externo)
 EXPOSE 9000
 
 # Comando para iniciar o servidor
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
