@@ -23,22 +23,22 @@ const usuarios = [
 // Middleware para verificar autenticação
 const verificarToken = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
-  
+
   if (!token) {
-    return res.status(401).json({ 
-      sucesso: false, 
-      mensagem: 'Acesso negado. Token não fornecido.' 
+    return res.status(401).json({
+      sucesso: false,
+      mensagem: 'Acesso negado. Token não fornecido.'
     });
   }
-  
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.usuario = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ 
-      sucesso: false, 
-      mensagem: 'Token inválido ou expirado' 
+    res.status(401).json({
+      sucesso: false,
+      mensagem: 'Token inválido ou expirado'
     });
   }
 };
@@ -46,26 +46,26 @@ const verificarToken = (req, res, next) => {
 // Rota de login
 app.post('/api/auth/login', (req, res) => {
   const { email, senha } = req.body;
-  
+
   // Verificar credenciais
   const usuario = usuarios.find(u => u.email === email && u.senha === senha);
-  
+
   if (!usuario) {
-    return res.status(401).json({ 
-      sucesso: false, 
-      mensagem: 'Email ou senha inválidos' 
+    return res.status(401).json({
+      sucesso: false,
+      mensagem: 'Email ou senha inválidos'
     });
   }
-  
+
   // Gerar token JWT
   const token = jwt.sign(
     { id: usuario.id, email: usuario.email, nome: usuario.nome },
     JWT_SECRET,
     { expiresIn: '1h' }
   );
-  
-  res.json({ 
-    sucesso: true, 
+
+  res.json({
+    sucesso: true,
     token,
     usuario: {
       id: usuario.id,
@@ -77,9 +77,9 @@ app.post('/api/auth/login', (req, res) => {
 
 // Rota para verificar token
 app.get('/api/auth/verificar', verificarToken, (req, res) => {
-  res.json({ 
-    sucesso: true, 
-    usuario: req.usuario 
+  res.json({
+    sucesso: true,
+    usuario: req.usuario
   });
 });
 
@@ -101,14 +101,19 @@ app.get('/api/dados', verificarToken, (req, res) => {
 
 // Rota de status
 app.get('/api/status', (req, res) => {
-  res.json({ 
+  res.json({
     status: 'online',
     mensagem: 'API funcionando normalmente'
   });
 });
 
-// Rota para todas as outras requisições - redireciona para o index.html
-app.get('*', (req, res) => {
+// Rota para dashboard
+app.get('/dashboard.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
+// Rota para a página inicial
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
