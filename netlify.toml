@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  functions = "functions"
+  publish = "public"
+
+[dev]
+  command = "npm run start"
+  functions = "src/lambda"
+  publish = "public"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
